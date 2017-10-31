@@ -147,7 +147,7 @@ public class Controller {
                 temporaryMark = new RectangleMark(x, y, width, height, true);
                 break;
             case "OVAL":
-                markList.add(new OvalMark(x, y, width, height));
+                temporaryMark = new OvalMark(x, y, width, height, true);
                 break;
         }
         boardPanel.revalidate();
