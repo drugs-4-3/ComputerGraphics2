@@ -45,13 +45,6 @@ public class BoardPanel extends JPanel {
         g2d.drawImage(image, 0, 0, null);
     }
 
-    @Override
-    public Dimension getPreferredSize() {
-        return super.getPreferredSize();
-        //return new Dimension(DEFAULT_WIDTH, DEFAULT_HEIGHT);
-    }
-
-
     public BufferedImage getImage() {
         return image;
     }

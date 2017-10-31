@@ -5,8 +5,6 @@ public class RectangleMark extends Mark {
     public final int CATEGORY = Mark.CATEGORY_RECT;
     private static final int DEFAULT_STROKE_THICKNESS = 8;
     private static final Color DEFAULT_COLOR = Color.RED;
-    private Stroke stroke;
-    private Color color;
     private int x, y, width, height;
 
     public RectangleMark(int x1, int y1, int x2, int y2) {
@@ -25,4 +23,5 @@ public class RectangleMark extends Mark {
         g2d.setStroke(this.stroke);
         g.drawRect(x, y, width, height);
     }
+
 }

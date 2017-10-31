@@ -17,12 +17,14 @@ public class Controller {
     private Window window;
     private static double MIN_MARK_SIZE = 30;
     private LinkedList<Mark> markList;
+    private String currentToolName;
 
     public Controller() {
         chooser = new JFileChooser();
         boardPanel = new BoardPanel(this);
         toolsPanel = new ToolsPanel(this);
         markList = new LinkedList<>();
+        currentToolName = "RECTANGLE";
     }
 
     public void run() {
@@ -70,7 +72,17 @@ public class Controller {
 
     public void addMark(int x1, int y1, int x2, int y2) {
         if (dist(x1, y1, x2, y2) > MIN_MARK_SIZE) {
-            markList.add(new RectangleMark(x1, y1, x2, y2));
+            switch(this.getCurrentTool()) {
+                case "RECTANGLE":
+                    markList.add(new RectangleMark(x1, y1, x2, y2));
+                    break;
+                case "OVAL":
+                    int width = (int)dist(x1, 0, x2, 0);
+                    int height = (int)dist(0, y1, 0, y2);
+                    markList.add(new OvalMark(x1, y1, width, height));
+                    break;
+            }
+
             drawMarks();
             boardPanel.repaint();
         }
@@ -104,9 +116,17 @@ public class Controller {
         Graphics2D g2d = (Graphics2D) g;
 
         for (Mark m: markList) {
-            System.out.println("paintint mark");
+            System.out.println("painting mark");
             m.draw(g);
         }
         boardPanel.revalidate();
+    }
+
+    public void setCurrentTool(String name) {
+        this.currentToolName = name.toUpperCase();
+    }
+
+    public String getCurrentTool() {
+        return this.currentToolName;
     }
 }
