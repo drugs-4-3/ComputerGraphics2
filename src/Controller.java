@@ -16,8 +16,9 @@ public class Controller {
     JPanel mainPanel;
     private Window window;
     private static double MIN_MARK_SIZE = 30;
-    private LinkedList<Mark> markList;
+    public LinkedList<Mark> markList;
     private String currentToolName;
+    private Mark temporaryMark;
 
     public Controller() {
         chooser = new JFileChooser();
@@ -25,6 +26,7 @@ public class Controller {
         toolsPanel = new ToolsPanel(this);
         markList = new LinkedList<>();
         currentToolName = "RECTANGLE";
+        temporaryMark = null;
     }
 
     public void run() {
@@ -72,19 +74,20 @@ public class Controller {
 
     public void addMark(int x1, int y1, int x2, int y2) {
         if (dist(x1, y1, x2, y2) > MIN_MARK_SIZE) {
+            int x, y, width, height;
+            x = x1 < x2 ? x1 : x2;
+            y = y1 < y2 ? y1 : y2;
+            width = (int)dist(x1, 0, x2, 0);
+            height = (int)dist(0, y1, 0, y2);
             switch(this.getCurrentTool()) {
                 case "RECTANGLE":
-                    markList.add(new RectangleMark(x1, y1, x2, y2));
+                    markList.add(new RectangleMark(x, y, width, height));
                     break;
                 case "OVAL":
-                    int width = (int)dist(x1, 0, x2, 0);
-                    int height = (int)dist(0, y1, 0, y2);
-                    markList.add(new OvalMark(x1, y1, width, height));
+                    markList.add(new OvalMark(x, y, width, height));
                     break;
             }
 
-            drawMarks();
-            boardPanel.repaint();
         }
     }
 
@@ -119,6 +122,9 @@ public class Controller {
             System.out.println("painting mark");
             m.draw(g);
         }
+        if (temporaryMark != null) {
+            temporaryMark.draw(g);
+        }
         boardPanel.revalidate();
     }
 
@@ -128,5 +134,27 @@ public class Controller {
 
     public String getCurrentTool() {
         return this.currentToolName;
+    }
+
+    public void setTemporaryMark(int x1, int y1, int x2, int y2) {
+        int x = x1 < x2 ? x1 : x2;
+        int y = y1 < y2 ? y1 : y2;
+        int width = (int)dist(x1, 0, x2, 0);
+        int height = (int)dist(0, y1, 0, y2);
+
+        switch(this.getCurrentTool()) {
+            case "RECTANGLE":
+                temporaryMark = new RectangleMark(x, y, width, height, true);
+                break;
+            case "OVAL":
+                markList.add(new OvalMark(x, y, width, height));
+                break;
+        }
+        boardPanel.revalidate();
+        boardPanel.repaint();
+    }
+
+    public void setTemporaryMark(Mark m) {
+        this.temporaryMark = m;
     }
 }

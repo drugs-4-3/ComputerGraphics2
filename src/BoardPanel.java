@@ -2,6 +2,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
 import java.awt.image.BufferedImage;
 
 public class BoardPanel extends JPanel {
@@ -42,6 +43,7 @@ public class BoardPanel extends JPanel {
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2d = (Graphics2D) g;
+        controller.drawMarks();
         g2d.drawImage(image, 0, 0, null);
     }
 
@@ -64,7 +66,7 @@ public class BoardPanel extends JPanel {
         return stroke;
     }
 
-    private class BoardMouseListener implements MouseListener {
+    private class BoardMouseListener implements MouseListener, MouseMotionListener {
 
         @Override
         public void mouseClicked(MouseEvent mouseEvent) {
@@ -84,6 +86,8 @@ public class BoardPanel extends JPanel {
             x2cords = mouseEvent.getX();
             y2cords = mouseEvent.getY();
             controller.addMark(x1cords, y1cords, x2cords, y2cords);
+            controller.setTemporaryMark(null);
+            repaint();
         }
 
         @Override
@@ -93,6 +97,16 @@ public class BoardPanel extends JPanel {
 
         @Override
         public void mouseExited(MouseEvent mouseEvent) {
+
+        }
+
+        @Override
+        public void mouseDragged(MouseEvent mouseEvent) {
+            controller.setTemporaryMark(x1cords, y1cords, mouseEvent.getX(), mouseEvent.getY());
+        }
+
+        @Override
+        public void mouseMoved(MouseEvent mouseEvent) {
 
         }
     }
