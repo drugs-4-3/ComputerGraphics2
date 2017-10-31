@@ -4,6 +4,8 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.image.BufferedImage;
+import java.awt.image.ColorModel;
+import java.awt.image.WritableRaster;
 import java.io.File;
 import java.io.IOException;
 import java.util.LinkedList;
@@ -107,7 +109,6 @@ public class Controller {
     private void loadImage(File file) throws IOException{
         BufferedImage image = ImageIO.read(file);
         boardPanel.setImage(image);
-        boardPanel.setPreferredSize(new Dimension(image.getWidth(), image.getHeight()));
         drawMarks();
         boardPanel.repaint();
         window.pack();
@@ -116,7 +117,6 @@ public class Controller {
     public void drawMarks() {
         BufferedImage image = boardPanel.getImage();
         Graphics g = image.getGraphics();
-        Graphics2D g2d = (Graphics2D) g;
 
         for (Mark m: markList) {
             System.out.println("painting mark");
@@ -156,5 +156,16 @@ public class Controller {
 
     public void setTemporaryMark(Mark m) {
         this.temporaryMark = m;
+    }
+
+    public Mark getTemporaryMark() {
+        return this.temporaryMark;
+    }
+
+    public static BufferedImage deepCopyBufferedImage(BufferedImage bi) {
+        ColorModel cm = bi.getColorModel();
+        boolean isAlphaPremultiplied = cm.isAlphaPremultiplied();
+        WritableRaster raster = bi.copyData(null);
+        return new BufferedImage(cm, raster, isAlphaPremultiplied, null);
     }
 }
