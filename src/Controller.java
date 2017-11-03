@@ -206,7 +206,7 @@ public class Controller {
         }
     }
 
-    public Mark getSelectedMark() {
+    private Mark getSelectedMark() {
         return this.selectedMark;
     }
 
@@ -214,7 +214,6 @@ public class Controller {
 
 /*
     - newly added mark should be selected by default
-     - method for selecting given mark and deselecting others
+    - method for selecting given mark and deselecting others
     - modify selected mark - allow to move every side of rect
-
  */
