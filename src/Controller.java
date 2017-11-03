@@ -21,6 +21,7 @@ public class Controller {
     public LinkedList<Mark> markList;
     private String currentToolName;
     private Mark temporaryMark;
+    private Mark selectedMark;
 
     public Controller() {
         chooser = new JFileChooser();
@@ -168,4 +169,52 @@ public class Controller {
         WritableRaster raster = bi.copyData(null);
         return new BufferedImage(cm, raster, isAlphaPremultiplied, null);
     }
+
+    /**
+     * First mark which border contains point (x, y) is set as selected.
+     * Only one mark at time can be selected
+     *
+     * @param x cord
+     * @param y cord
+     * @return true if point (x,y) is inside borders of one of the marks.
+     */
+    public boolean trySelectingMark(int x, int y) {
+        boolean result = false;
+        for(Mark m: markList) {
+            if (!result) {
+                if (m.isPointInsideBorder(x, y)) {
+                    m.setSelected(true);
+                    result = true;
+                }
+                else {
+                    m.setSelected(false);
+                }
+            }
+            else {
+                m.setSelected(false);
+            }
+        }
+        return result;
+    }
+
+    public void modifySelectedMark(int x, int y) {
+        Mark m = getSelectedMark();
+        if (m != null) {
+            // we need to know to which direction we want
+            boolean horizontalSide = x >= (m.getX() + m.getWidth())/2;
+            boolean verticallSide = y >= (m.getY() + m.getHeight())/2;
+        }
+    }
+
+    public Mark getSelectedMark() {
+        return this.selectedMark;
+    }
+
 }
+
+/*
+    - newly added mark should be selected by default
+     - method for selecting given mark and deselecting others
+    - modify selected mark - allow to move every side of rect
+
+ */

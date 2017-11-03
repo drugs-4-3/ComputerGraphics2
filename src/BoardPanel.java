@@ -17,6 +17,7 @@ public class BoardPanel extends JPanel {
     private Stroke stroke;
     private BoardMouseListener listener;
     private boolean isLoadedImage = false;
+    private boolean hasMarkSelected = false;
 
 
     private int x1cords;
@@ -86,6 +87,8 @@ public class BoardPanel extends JPanel {
             System.out.println("x: " + mouseEvent.getX() + "  y: " + mouseEvent.getY());
             Graphics2D g2d = (Graphics2D) image.getGraphics();
             System.out.println("stroke: " + ((BasicStroke)g2d.getStroke()).getLineWidth());
+            hasMarkSelected = controller.trySelectingMark(x1cords, y1cords);
+            repaint();
         }
 
         @Override
