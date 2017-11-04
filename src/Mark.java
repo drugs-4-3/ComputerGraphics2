@@ -139,4 +139,17 @@ public abstract class Mark {
         }
         return bigger;
     }
+
+    @Override
+    public String toString() {
+        switch(CATEGORY) {
+            case CATEGORY_RECT:
+                return String.format("Rectangle: (%d, %d, %d, %d)", x, y, x+width, y+height);
+            case CATEGORY_OVAL:
+                return String.format("Oval: (%d, %d, %d, %d)", x, y, x+width, y+height);
+            default:
+                break;
+        }
+        return "";
+    }
 }

@@ -22,8 +22,10 @@ public class Controller {
     private String currentToolName;
     private Mark temporaryMark;
     private Mark selectedMark;
+    private DefaultListModel<Mark> model;
 
     public Controller() {
+        model = new DefaultListModel<>();
         chooser = new JFileChooser();
         boardPanel = new BoardPanel(this);
         toolsPanel = new ToolsPanel(this);
@@ -82,15 +84,19 @@ public class Controller {
             y = y1 < y2 ? y1 : y2;
             width = (int)dist(x1, 0, x2, 0);
             height = (int)dist(0, y1, 0, y2);
+            Mark m = null;
             switch(this.getCurrentTool()) {
                 case "RECTANGLE":
-                    markList.add(new RectangleMark(x, y, width, height));
+                    m = new RectangleMark(x, y, width, height);
                     break;
                 case "OVAL":
-                    markList.add(new OvalMark(x, y, width, height));
+                    m = new OvalMark(x, y, width, height);
+                    break;
+                default:
                     break;
             }
-
+            markList.add(m);
+            model.addElement(m);
         }
     }
 
@@ -208,6 +214,10 @@ public class Controller {
 
     private Mark getSelectedMark() {
         return this.selectedMark;
+    }
+
+    public DefaultListModel<Mark> getMarkListModel() {
+        return this.model;
     }
 
 }

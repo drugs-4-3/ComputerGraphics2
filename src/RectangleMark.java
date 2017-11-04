@@ -32,21 +32,4 @@ public class RectangleMark extends Mark {
         super.draw(g);
         g.drawRect(x, y, width, height);
     }
-
-
-//    @Override
-//    public boolean isPointInsideBorder(int x, int y) {
-//        Shape shape = getShape();
-//        Shape bigger = new Rectangle2D.Double(
-//                this.x - DEFAULT_STROKE_THICKNESS/2,
-//                this.y - DEFAULT_STROKE_THICKNESS/2,
-//                this.width + DEFAULT_STROKE_THICKNESS,
-//                this.height + DEFAULT_STROKE_THICKNESS);
-//        Shape smaller = new Rectangle2D.Double(
-//                this.x + DEFAULT_STROKE_THICKNESS/2,
-//                this.y + DEFAULT_STROKE_THICKNESS/2,
-//                this.width - DEFAULT_STROKE_THICKNESS,
-//                this.height - DEFAULT_STROKE_THICKNESS);
-//        return bigger.contains(x, y) && !smaller.contains(x, y);
-//    }
 }
