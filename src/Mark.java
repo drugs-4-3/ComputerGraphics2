@@ -1,8 +1,9 @@
 import java.awt.*;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Rectangle2D;
+import java.io.Serializable;
 
-public abstract class Mark {
+public abstract class Mark implements Serializable {
 
     public static final int CATEGORY_RECT = 1;
     public static final int CATEGORY_OVAL = 2;
@@ -23,7 +24,6 @@ public abstract class Mark {
     protected Stroke stroke;
     protected Color color;
     protected boolean isSelected = false;
-    protected Shape shape;
 
     public Mark(int x, int y, int width, int height) {
         this.x = x;

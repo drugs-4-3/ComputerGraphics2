@@ -6,8 +6,7 @@ import java.awt.event.ActionEvent;
 import java.awt.image.BufferedImage;
 import java.awt.image.ColorModel;
 import java.awt.image.WritableRaster;
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.util.LinkedList;
 
 public class Controller {
@@ -75,6 +74,83 @@ public class Controller {
                 chooser.setFileFilter(null); // don't forget to disable only image filter for chooser
             }
         };
+    }
+
+    public AbstractAction getImportActionListener() {
+        return new AbstractAction() {
+            public void actionPerformed(ActionEvent e) {
+                int result = chooser.showOpenDialog(boardPanel);
+                if (result == JFileChooser.APPROVE_OPTION) {
+                    try {
+                        importMarks(chooser.getSelectedFile());
+                    } catch (Exception ex) {
+                        JOptionPane.showMessageDialog(
+                                null,
+                                "Cannot load file",
+                                "Error",
+                                JOptionPane.ERROR_MESSAGE);
+                    }
+                }
+                chooser.setFileFilter(null); // don't forget to disable only image filter for chooser
+                boardPanel.repaint();
+            }
+        };
+    }
+
+    public AbstractAction getExportActionListener() {
+        return new AbstractAction() {
+            public void actionPerformed(ActionEvent e) {
+                chooser.setSelectedFile(new File("marks"));
+                int result = chooser.showSaveDialog(null);
+                if (result == JFileChooser.APPROVE_OPTION) {
+                    try {
+                        exportMarks(chooser.getSelectedFile());
+                    } catch (IOException ex) {
+                        ex.printStackTrace();
+                        JOptionPane.showMessageDialog(
+                                null,
+                                "Cannot save file",
+                                "Error",
+                                JOptionPane.ERROR_MESSAGE);
+                    }
+                }
+            }
+        };
+    }
+
+    private void exportMarks(File file) throws IOException {
+        FileWriter fw = new FileWriter(file);
+        for(Mark m: markList) {
+            fw.write(String.format("%d %d %d %d %d \n", m.CATEGORY, m.x, m.y, m.width, m.height));
+
+        }
+        fw.close();
+    }
+
+    private void importMarks(File file) throws Exception {
+        FileReader fr = new FileReader(file);
+        BufferedReader br = new BufferedReader(fr);
+        String line;
+        while((line = br.readLine()) != null) {
+            String[] split = line.split(" ");
+            int category = Integer.valueOf(split[0]);
+            int x = Integer.valueOf(split[1]);
+            int y = Integer.valueOf(split[2]);
+            int width = Integer.valueOf(split[3]);
+            int height = Integer.valueOf(split[4]);
+            switch (category) {
+                case Mark.CATEGORY_RECT:
+                    Mark m = new RectangleMark(x, y, width, height);
+                    markList.add(m);
+                    model.addElement(m);
+                    break;
+                case Mark.CATEGORY_OVAL:
+                    markList.add(new OvalMark(x, y, width, height));
+                    break;
+                default:
+                    throw new Exception("Provided file has illegal content");
+            }
+        }
     }
 
     public void addMark(int x1, int y1, int x2, int y2) {
