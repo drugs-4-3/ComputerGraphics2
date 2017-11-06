@@ -8,6 +8,7 @@ import java.awt.event.ActionListener;
 public class ToolsPanel extends JPanel implements ActionListener {
 
     private Controller controller;
+    public JList list;
     GridBagConstraints c;
 
     public ToolsPanel(Controller controller) {
@@ -60,10 +61,27 @@ public class ToolsPanel extends JPanel implements ActionListener {
         c.weighty = 0.5;
         c.weightx = 0.5;
         add(ovalButton, c);
+
+        JButton deleteButton = new JButton("Delete");
+        deleteButton.addActionListener(controller.getDeleteActionListener());
+        deleteButton.setPreferredSize(new Dimension(130, 30));
+        deleteButton.setBackground(new Color(59, 89, 182));
+        deleteButton.setFont(new Font("Tahoma", Font.BOLD, 12));
+        deleteButton.setFocusPainted(false);
+        deleteButton.setForeground(Color.WHITE);
+        c = new GridBagConstraints();
+        c.gridx = 1;
+        c.gridy = 0;
+        c.fill = c.HORIZONTAL;
+        c.anchor = c.FIRST_LINE_START;
+        c.insets = new Insets(5, 5, 5, 0);
+        c.weighty = 0.5;
+        c.weightx = 0.5;
+        add(deleteButton, c);
     }
 
     private void setMarkScrollList() {
-        JList list = new JList(controller.getMarkListModel());
+        list = new JList(controller.getMarkListModel());
         JScrollPane scrollPane = new JScrollPane(list);
         list.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
         scrollPane.setPreferredSize(new Dimension(300, 300));
@@ -82,6 +100,14 @@ public class ToolsPanel extends JPanel implements ActionListener {
     public void actionPerformed(ActionEvent actionEvent) {
         JButton source = (JButton) actionEvent.getSource();
         controller.setCurrentTool(source.getText());
+    }
+
+    public int getSelectedIndex() {
+        return list.getSelectedIndex();
+    }
+
+    public void selectMarkAt(int index) {
+        list.setSelectedIndex(index);
     }
 
 }

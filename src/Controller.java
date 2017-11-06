@@ -3,6 +3,7 @@ import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.awt.image.ColorModel;
 import java.awt.image.WritableRaster;
@@ -265,6 +266,8 @@ public class Controller {
         for(Mark m: markList) {
             if (!result) {
                 if (m.isPointInsideBorder(x, y)) {
+                    int index = markList.indexOf(m);
+                    toolsPanel.selectMarkAt(index);
                     m.setSelected(true);
                     result = true;
                 }
@@ -274,6 +277,7 @@ public class Controller {
             }
             else {
                 m.setSelected(false);
+                toolsPanel.selectMarkAt(-1);
             }
         }
         return result;
@@ -294,6 +298,21 @@ public class Controller {
 
     public DefaultListModel<Mark> getMarkListModel() {
         return this.model;
+    }
+
+    public ActionListener getDeleteActionListener() {
+        return new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                int selected_index = toolsPanel.getSelectedIndex();
+                //toolsPanel.list.remove(selected_index);
+                if (selected_index >= 0) {
+                    model.remove(selected_index);
+                    markList.remove(selected_index);
+                    boardPanel.repaint();
+                }
+            }
+        };
     }
 
 }
