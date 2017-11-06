@@ -7,8 +7,8 @@ import java.awt.image.BufferedImage;
 
 public class BoardPanel extends JPanel {
 
-    public static final int DEFAULT_WIDTH = 600;
-    public static final int DEFAULT_HEIGHT = 400;
+    public static final int DEFAULT_WIDTH = 800;
+    public static final int DEFAULT_HEIGHT = 600;
     private Controller controller;
     private BufferedImage image, loadedImageAsIs;
     public int width;
@@ -18,6 +18,7 @@ public class BoardPanel extends JPanel {
     private BoardMouseListener listener;
     private boolean isLoadedImage = false;
     private boolean hasMarkSelected = false;
+    public String imageFileName;
 
 
     private int x1cords;

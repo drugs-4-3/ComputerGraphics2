@@ -23,6 +23,7 @@ public class Controller {
     private Mark temporaryMark;
     private Mark selectedMark;
     private DefaultListModel<Mark> model;
+    private String imageFileName = "";
 
     public Controller() {
         model = new DefaultListModel<>();
@@ -121,6 +122,7 @@ public class Controller {
 
     private void exportMarks(File file) throws IOException {
         FileWriter fw = new FileWriter(file);
+        fw.write(imageFileName + "\n");
         for(Mark m: markList) {
             fw.write(String.format("%d %d %d %d %d \n", m.CATEGORY, m.x, m.y, m.width, m.height));
 
@@ -132,6 +134,10 @@ public class Controller {
         FileReader fr = new FileReader(file);
         BufferedReader br = new BufferedReader(fr);
         String line;
+        String fileName = br.readLine();
+        if (!fileName.equals(imageFileName)) {
+            return;
+        }
         while((line = br.readLine()) != null) {
             String[] split = line.split(" ");
             int category = Integer.valueOf(split[0]);
@@ -192,6 +198,9 @@ public class Controller {
 
     private void loadImage(File file) throws IOException{
         BufferedImage image = ImageIO.read(file);
+        imageFileName = file.getName();
+        markList.clear();
+        model.removeAllElements();
         boardPanel.setImage(image);
         drawMarks();
         boardPanel.repaint();
